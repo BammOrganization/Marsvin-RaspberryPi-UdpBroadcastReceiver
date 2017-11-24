@@ -35,9 +35,10 @@ namespace RaspberryPi_UdpBroadcastReceiver
         {
             //test string
             //var checkmig = "dus skal se dette link igennem for at inde ud https://imgur.com/a/RmGd9 om der er noget vi kan bruge";
+            string _strToCheck = GetBroadcast();
 
-            if (GetBroadcast().Contains("http"))
-                foreach (Match item in Regex.Matches(checkmig, @"(http|ftp|https):\/\/([\w\-_]+(?:(?:\.[\w\-_]+)+))([\w\-\.,@?^=%&amp;:/~\+#]*[\w\-\@?^=%&amp;/~\+#])?"))
+            if (_strToCheck.Contains("http"))
+                foreach (Match item in Regex.Matches(_strToCheck, @"(http|ftp|https):\/\/([\w\-_]+(?:(?:\.[\w\-_]+)+))([\w\-\.,@?^=%&amp;:/~\+#]*[\w\-\@?^=%&amp;/~\+#])?"))
 
                     //linker fx https://imgur.com/a/RmGd9
                     return item.Value;
