@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Net.Sockets;
 using System.Net;
-using RaspberryPi_UdpBroadcastReceiver.LightTempServiceReference;
+using RaspberryPi_UdpBroadcastReceiver.ServiceReference1;
 
 namespace RaspberryPi_UdpBroadcastReceiver
 {
@@ -26,12 +26,12 @@ namespace RaspberryPi_UdpBroadcastReceiver
 
 
 
-        static void SendDataToWebservice(int light, int temp)
+        static void SendDataToWebservice(int dB, string ImgurLink)
         {
-            using (LightTempServiceReference.LightTempServiceClient refclient =
+            using (ServiceReference1.LightTempServiceClient refclient =
                 new LightTempServiceClient("BasicHttpBinding_ILightTempService"))
             {
-                refclient.AddLightTempData(light,temp);
+                refclient.AddLightTempData(dB,ImgurLink);
             }
         }
 
@@ -61,7 +61,7 @@ namespace RaspberryPi_UdpBroadcastReceiver
                     Console.WriteLine("Message: "+message);
                     DecodeMessage(message, out dB, out ImgurLink);
                     
-                    //SendDataToWebservice(lightInt,tempInt);
+                    SendDataToWebservice(dB,ImgurLink);
                 }
 
             }
