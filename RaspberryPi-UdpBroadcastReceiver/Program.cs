@@ -77,14 +77,14 @@ namespace RaspberryPi_UdpBroadcastReceiver
                 for (int i = 0; i < 5; i++)
                 {
                     int currentDb = GetDb();
-
+                    
                     list.Add(currentDb);
                 }
                 avergedb =  list.Average();
                 returndb = Convert.ToInt32(avergedb);
                 foreach (var item in list)
                 {
-                    Console.WriteLine("måling" + item);
+                    Console.WriteLine("Måling: " + item);
                 }
                 list.Clear();
                 return returndb;
@@ -130,9 +130,11 @@ namespace RaspberryPi_UdpBroadcastReceiver
 
             while (true)
             {
+                //GetBroadcast();
+
                 var _gennemsnit = GennemsnitDB();
 
-                if (_gennemsnit > 50)
+                if (_gennemsnit >= 50)
                 {
                     //var _db = GennemsnitDB();
                     var _link = CheckForLink();
@@ -146,12 +148,11 @@ namespace RaspberryPi_UdpBroadcastReceiver
                     //metode lavet. dog ikke published samt udkommenteret
                     //var _db = GennemsnitDB();
                     Service.AddMeasurementNoLink(new MarsvinService.Measurement {dB = _gennemsnit});
-                    Console.WriteLine("Beregning" + _gennemsnit);
+                    Console.WriteLine("Beregning " + _gennemsnit);
                 }
-
-                //så vi ikke bliver ved med køre den samme kode
+                
                 Console.WriteLine("slut loop");
-                Console.ReadLine();
+                
             }
         }
 
