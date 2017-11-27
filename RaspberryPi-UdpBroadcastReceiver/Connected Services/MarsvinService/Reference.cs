@@ -222,6 +222,12 @@ namespace RaspberryPi_UdpBroadcastReceiver.MarsvinService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMarsvinService/AddMeasurement", ReplyAction="http://tempuri.org/IMarsvinService/AddMeasurementResponse")]
         System.Threading.Tasks.Task<int> AddMeasurementAsync(RaspberryPi_UdpBroadcastReceiver.MarsvinService.Measurement measurement);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMarsvinService/AddMeasurementNoLink", ReplyAction="http://tempuri.org/IMarsvinService/AddMeasurementNoLinkResponse")]
+        int AddMeasurementNoLink(RaspberryPi_UdpBroadcastReceiver.MarsvinService.Measurement measurement);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMarsvinService/AddMeasurementNoLink", ReplyAction="http://tempuri.org/IMarsvinService/AddMeasurementNoLinkResponse")]
+        System.Threading.Tasks.Task<int> AddMeasurementNoLinkAsync(RaspberryPi_UdpBroadcastReceiver.MarsvinService.Measurement measurement);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -297,6 +303,14 @@ namespace RaspberryPi_UdpBroadcastReceiver.MarsvinService {
         
         public System.Threading.Tasks.Task<int> AddMeasurementAsync(RaspberryPi_UdpBroadcastReceiver.MarsvinService.Measurement measurement) {
             return base.Channel.AddMeasurementAsync(measurement);
+        }
+        
+        public int AddMeasurementNoLink(RaspberryPi_UdpBroadcastReceiver.MarsvinService.Measurement measurement) {
+            return base.Channel.AddMeasurementNoLink(measurement);
+        }
+        
+        public System.Threading.Tasks.Task<int> AddMeasurementNoLinkAsync(RaspberryPi_UdpBroadcastReceiver.MarsvinService.Measurement measurement) {
+            return base.Channel.AddMeasurementNoLinkAsync(measurement);
         }
     }
 }

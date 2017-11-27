@@ -108,6 +108,20 @@
           </xs:sequence>
         </xs:complexType>
       </xs:element>
+      <xs:element name="AddMeasurementNoLink">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/MarsvinServiceSOAP" minOccurs="0" name="measurement" nillable="true" type="q7:Measurement" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="AddMeasurementNoLinkResponse">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="AddMeasurementNoLinkResult" type="xs:int" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
     </xs:schema>
     <xs:schema xmlns:tns="http://schemas.microsoft.com/2003/10/Serialization/" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://schemas.microsoft.com/2003/10/Serialization/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
       <xs:element name="anyType" nillable="true" type="xs:anyType" />
@@ -212,6 +226,12 @@
   <wsdl:message name="IMarsvinService_AddMeasurement_OutputMessage">
     <wsdl:part name="parameters" element="tns:AddMeasurementResponse" />
   </wsdl:message>
+  <wsdl:message name="IMarsvinService_AddMeasurementNoLink_InputMessage">
+    <wsdl:part name="parameters" element="tns:AddMeasurementNoLink" />
+  </wsdl:message>
+  <wsdl:message name="IMarsvinService_AddMeasurementNoLink_OutputMessage">
+    <wsdl:part name="parameters" element="tns:AddMeasurementNoLinkResponse" />
+  </wsdl:message>
   <wsdl:portType name="IMarsvinService">
     <wsdl:operation name="GetAllUsers">
       <wsdl:input wsaw:Action="http://tempuri.org/IMarsvinService/GetAllUsers" message="tns:IMarsvinService_GetAllUsers_InputMessage" />
@@ -236,6 +256,10 @@
     <wsdl:operation name="AddMeasurement">
       <wsdl:input wsaw:Action="http://tempuri.org/IMarsvinService/AddMeasurement" message="tns:IMarsvinService_AddMeasurement_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IMarsvinService/AddMeasurementResponse" message="tns:IMarsvinService_AddMeasurement_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="AddMeasurementNoLink">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMarsvinService/AddMeasurementNoLink" message="tns:IMarsvinService_AddMeasurementNoLink_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMarsvinService/AddMeasurementNoLinkResponse" message="tns:IMarsvinService_AddMeasurementNoLink_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="BasicHttpBinding_IMarsvinService" type="tns:IMarsvinService">
@@ -294,6 +318,15 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="AddMeasurementNoLink">
+      <soap:operation soapAction="http://tempuri.org/IMarsvinService/AddMeasurementNoLink" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
   </wsdl:binding>
   <wsdl:binding name="BasicHttpsBinding_IMarsvinService" type="tns:IMarsvinService">
     <wsp:PolicyReference URI="#BasicHttpsBinding_IMarsvinService_policy" />
@@ -345,6 +378,15 @@
     </wsdl:operation>
     <wsdl:operation name="AddMeasurement">
       <soap:operation soapAction="http://tempuri.org/IMarsvinService/AddMeasurement" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddMeasurementNoLink">
+      <soap:operation soapAction="http://tempuri.org/IMarsvinService/AddMeasurementNoLink" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>

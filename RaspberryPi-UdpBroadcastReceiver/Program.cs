@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -48,12 +50,52 @@ namespace RaspberryPi_UdpBroadcastReceiver
         }
 
 
-        private static int GennemsnitDB()
+        private static int GetDb()
         {
+            int dB;
+            string getDb = GetBroadcast();
+
+            string[] parts = getDb.Split(' ');
+            dB = Convert.ToInt32(parts[5]);
+
             //TODO: lav gennemsnit 
             // 4 er placeholder
-            return 4;
+            return dB;
         }
+
+        //Benjamin
+        private static int GennemsnitDB()
+        { 
+
+            while (true)
+            {
+                List<int> list = new List<int>();
+                double avergedb;
+                int returndb;
+
+                
+                for (int i = 0; i < 5; i++)
+                {
+                    int currentDb = GetDb();
+
+                    list.Add(currentDb);
+                }
+                avergedb =  list.Average();
+                returndb = Convert.ToInt32(avergedb);
+                foreach (var item in list)
+                {
+                    Console.WriteLine("måling" + item);
+                }
+                list.Clear();
+                return returndb;
+                
+            }
+
+        }
+
+
+
+
 
 
         private static void Main(string[] args)
@@ -92,18 +134,19 @@ namespace RaspberryPi_UdpBroadcastReceiver
 
                 if (_gennemsnit > 50)
                 {
-                    var _db = GennemsnitDB();
+                    //var _db = GennemsnitDB();
                     var _link = CheckForLink();
                     Console.WriteLine(_link);
 
-                    Service.AddMeasurement(new MarsvinService.Measurement {dB = _db, ImageLink = _link});
+                    Service.AddMeasurement(new MarsvinService.Measurement {dB = _gennemsnit, ImageLink = _link});
                 }
                 else
                 {
                     //på nuværende tidspunkt er "" grundet mangle på ny metode som kun poser db.
                     //metode lavet. dog ikke published samt udkommenteret
-                    var _db = GennemsnitDB();
-                    Service.AddMeasurement(new MarsvinService.Measurement {dB = _db, ImageLink = ""});
+                    //var _db = GennemsnitDB();
+                    Service.AddMeasurementNoLink(new MarsvinService.Measurement {dB = _gennemsnit});
+                    Console.WriteLine("Beregning" + _gennemsnit);
                 }
 
                 //så vi ikke bliver ved med køre den samme kode
