@@ -33,11 +33,39 @@ namespace RaspberryPi_UdpBroadcastReceiver
         }
 
 
-        private static string CheckForLink()
+
+
+        private static void GetAverageAndLink(out int average, out string link)
+        {
+            var remoteEndPoint = new IPEndPoint(IpAddress, 9998);
+            string templink = "";
+            List<int> list = new List<int>(); // new list i clean           
+
+            using (var socket = new UdpClient(Port))
+            {
+                for (int i = 0; i < 5; i++)
+                {
+                    var datagramReceived = socket.Receive(ref remoteEndPoint);
+                    var message = Encoding.ASCII.GetString(datagramReceived, 0, datagramReceived.Length);
+                    if (String.IsNullOrEmpty(templink))
+                        templink = CheckForLink(message);
+                    list.Add(GetDb(message));
+                    Console.WriteLine("Måling: " + list[i] + " Link: " + templink);
+                }
+                double averageDouble = list.Average();
+                average = Convert.ToInt32(averageDouble);
+                link = templink;
+                //list.Clear();                
+            }
+        }
+
+
+
+
+        private static string CheckForLink(string _strToCheck)
         {
             //test string
-            //var checkmig = "dus skal se dette link igennem for at inde ud https://imgur.com/a/RmGd9 om der er noget vi kan bruge";
-            string _strToCheck = GetBroadcast();
+            //var checkmig = "dus skal se dette link igennem for at inde ud https://imgur.com/a/RmGd9 om der er noget vi kan bruge";            
 
             if (_strToCheck.Contains("http"))
                 foreach (Match item in Regex.Matches(_strToCheck, @"(http|ftp|https):\/\/([\w\-_]+(?:(?:\.[\w\-_]+)+))([\w\-\.,@?^=%&amp;:/~\+#]*[\w\-\@?^=%&amp;/~\+#])?"))
@@ -50,48 +78,41 @@ namespace RaspberryPi_UdpBroadcastReceiver
         }
 
 
-        private static int GetDb()
-        {
-            int dB;
-            string getDb = GetBroadcast();
-
-            string[] parts = getDb.Split(' ');
-            dB = Convert.ToInt32(parts[5]);
-
-            //TODO: lav gennemsnit 
-            // 4 er placeholder
-            return dB;
+        private static int GetDb(string _strToCheck)
+        {         
+            string[] parts = _strToCheck.Split(' ');
+            return Convert.ToInt32(parts[5]);           // 5. plads i string er dB        
         }
 
         //Benjamin
-        private static int GennemsnitDB()
-        { 
+        //private static int GennemsnitDB()
+        //{ 
 
-            while (true)
-            {
-                List<int> list = new List<int>();
-                double avergedb;
-                int returndb;
+        //    while (true)
+        //    {
+        //        List<int> list = new List<int>();
+        //        double avergedb;
+        //        int returndb;
 
                 
-                for (int i = 0; i < 5; i++)
-                {
-                    int currentDb = GetDb();
+        //        for (int i = 0; i < 5; i++)
+        //        {
+        //            int currentDb = GetDb();
                     
-                    list.Add(currentDb);
-                }
-                avergedb =  list.Average();
-                returndb = Convert.ToInt32(avergedb);
-                foreach (var item in list)
-                {
-                    Console.WriteLine("Måling: " + item);
-                }
-                list.Clear();
-                return returndb;
+        //            list.Add(currentDb);
+        //        }
+        //        avergedb =  list.Average();
+        //        returndb = Convert.ToInt32(avergedb);
+        //        foreach (var item in list)
+        //        {
+        //            Console.WriteLine("Måling: " + item);
+        //        }
+        //        list.Clear();
+        //        return returndb;
                 
-            }
+        //    }
 
-        }
+        //}
 
 
 
@@ -126,32 +147,27 @@ namespace RaspberryPi_UdpBroadcastReceiver
 
             #endregion
 
+            Console.WriteLine("Åbner klient");
+
             var Service = new MarsvinServiceClient();
 
+            Console.WriteLine("Klar til at modtage");
             while (true)
             {
-                //GetBroadcast();
+                GetAverageAndLink(out int _gennemsnit, out string _link);
+                Console.WriteLine("Link: "+_link);
+                Console.WriteLine("Beregning: " + _gennemsnit);
 
-                var _gennemsnit = GennemsnitDB();
-
-                if (_gennemsnit >= 50)
-                {
-                    //var _db = GennemsnitDB();
-                    var _link = CheckForLink();
-                    Console.WriteLine(_link);
-
+                if (_link != null) //(_gennemsnit >= 50)
+                {  
                     Service.AddMeasurement(new MarsvinService.Measurement {dB = _gennemsnit, ImageLink = _link});
                 }
                 else
                 {
-                    //på nuværende tidspunkt er "" grundet mangle på ny metode som kun poser db.
-                    //metode lavet. dog ikke published samt udkommenteret
-                    //var _db = GennemsnitDB();
                     Service.AddMeasurementNoLink(new MarsvinService.Measurement {dB = _gennemsnit});
-                    Console.WriteLine("Beregning " + _gennemsnit);
                 }
                 
-                Console.WriteLine("slut loop");
+                Console.WriteLine("Slut loop");
                 
             }
         }
