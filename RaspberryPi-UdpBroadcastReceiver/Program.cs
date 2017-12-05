@@ -38,23 +38,26 @@ namespace RaspberryPi_UdpBroadcastReceiver
         private static void GetAverageAndLink(out int average, out string link)
         {
             var remoteEndPoint = new IPEndPoint(IpAddress, 9998);
-            string templink = "";
-            List<int> list = new List<int>(); // new list i clean           
+            //string templink = "";
+            //List<int> list = new List<int>(); // new list i clean           
 
             using (var socket = new UdpClient(Port))
             {
-                for (int i = 0; i < 5; i++)
-                {
+                //for (int i = 0; i < 5; i++)
+                //{
                     var datagramReceived = socket.Receive(ref remoteEndPoint);
                     var message = Encoding.ASCII.GetString(datagramReceived, 0, datagramReceived.Length);
-                    if (String.IsNullOrEmpty(templink))
-                        templink = CheckForLink(message);
-                    list.Add(GetDb(message));
-                    Console.WriteLine("Måling: " + list[i] + " Link: " + templink);
-                }
-                double averageDouble = list.Average();
-                average = Convert.ToInt32(averageDouble);
-                link = templink;
+                   // if (String.IsNullOrEmpty(templink))
+                     //   templink = CheckForLink(message);
+                    //list.Add(GetDb(message));
+                    //Console.WriteLine("Måling: " + list[i] + " Link: " + templink);
+                link = CheckForLink(message);
+                average = GetDb(message);
+                Console.WriteLine("Måling: " + average + " Link: " + link);
+            //}
+               // double averageDouble = list.Average();
+                //average = Convert.ToInt32(averageDouble);
+                //link = templink;
                 //list.Clear();                
             }
         }
@@ -147,7 +150,7 @@ namespace RaspberryPi_UdpBroadcastReceiver
 
             #endregion
 
-            Console.WriteLine("Åbner klient");
+            Console.WriteLine("Åbner klient (husk at køre samme netværk som Raspberry Pi)");
 
             var Service = new MarsvinServiceClient();
 
